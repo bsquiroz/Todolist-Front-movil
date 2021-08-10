@@ -1,26 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
+import { getTasks } from "../api";
 
-const baseUrl = "http://10.0.2.2:3000/tasks";
+import Layout from "../components/Layout";
+import TaskList from "../components/TaskList";
 
 const HomeScreen = () => {
-    const loadTasks = async () => {
-        try {
-            const res = await fetch(baseUrl);
-            const data = await res.json();
-            console.log(data);
-            console.log("que mas");
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const [tasks, setTasks] = useState([]);
 
-    useEffect(() => {}, []);
+    const loadTasks = async () => {
+        const data = await getTasks();
+        setTasks(data);
+    };
+    useEffect(() => {
+        loadTasks();
+    }, []);
 
     return (
-        <View>
-            <Text>desde HomeScreen</Text>
-        </View>
+        <Layout>
+            <TaskList tasks={tasks} />
+        </Layout>
     );
 };
 
